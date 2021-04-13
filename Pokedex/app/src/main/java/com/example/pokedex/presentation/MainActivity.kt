@@ -2,6 +2,7 @@ package com.example.pokedex.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.presentation.adapter.MainAdapter
@@ -24,7 +25,16 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loadData()
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val manager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
+
+        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int) =  when (position) {
+                0 -> 2
+                else -> 1
+            }
+        }
+        //recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
     }
 }
