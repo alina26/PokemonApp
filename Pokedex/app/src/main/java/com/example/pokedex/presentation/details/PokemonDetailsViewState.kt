@@ -1,0 +1,14 @@
+package com.example.pokedex.presentation.details
+
+sealed class PokemonDetailsViewState {
+
+    object Loading: PokemonDetailsViewState()
+
+    data class Data(
+        val name: String,
+        val imageUrl: String,
+        val abilities: List<String>
+    ): PokemonDetailsViewState()
+
+    data class Error(val message:String): PokemonDetailsViewState()
+}

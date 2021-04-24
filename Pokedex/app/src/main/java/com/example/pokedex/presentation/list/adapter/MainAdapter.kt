@@ -1,4 +1,4 @@
-package com.example.pokedex.presentation.adapter
+package com.example.pokedex.presentation.list.adapter
 
 import android.graphics.Color
 import android.util.Log
@@ -17,7 +17,9 @@ private const val ITEM_TYPE_UNKNOWN = 0
 private const val ITEM_TYPE_POKEMON = 1
 private const val ITEM_TYPE_HEADER = 2
 
-class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MainAdapter(
+    private val onItemClicked: (id:String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: MutableList<DisplayableItem> = emptyList<DisplayableItem>().toMutableList()
 
@@ -33,7 +35,7 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             ITEM_TYPE_POKEMON -> {
                 val view = LayoutInflater.from(parent.context)
                         .inflate(R.layout.main_item, parent, false)
-                PokemonViewHolder(view)
+                PokemonViewHolder(view, onItemClicked)
             }
             ITEM_TYPE_HEADER -> {
                 val view = LayoutInflater.from(parent.context)
@@ -73,7 +75,7 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = items.size
 
 
-    class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class PokemonViewHolder(view: View, val onItemClicked: (id: String) -> Unit) : RecyclerView.ViewHolder(view) {
         private val textView = itemView.findViewById<TextView>(R.id.itemName)
         private val imagePreview = itemView.findViewById<ImageView>(R.id.imagePreview)
 
@@ -95,6 +97,10 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     Log.d("", "Loaded image", e)
                 }
             })
+
+            itemView.setOnClickListener{
+                onItemClicked(item.id)
+            }
         }
     }
 

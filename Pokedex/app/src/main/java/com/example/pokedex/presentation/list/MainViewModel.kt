@@ -1,28 +1,24 @@
-package com.example.pokedex.presentation
+package com.example.pokedex.presentation.list
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pokedex.data.MockPokemonRepository
 import com.example.pokedex.data.NetworkPokemonRepository
 import com.example.pokedex.data.network.createPokedexApiService
+import com.example.pokedex.di.Injector
 import com.example.pokedex.domain.PokemonEntity
 import com.example.pokedex.domain.PokemonRepository
-import com.example.pokedex.domain.RepositoryCallback
-import com.example.pokedex.presentation.adapter.DisplayableItem
-import com.example.pokedex.presentation.adapter.HeaderItem
-import com.example.pokedex.presentation.adapter.PokemonItem
+import com.example.pokedex.presentation.list.adapter.DisplayableItem
+import com.example.pokedex.presentation.list.adapter.HeaderItem
+import com.example.pokedex.presentation.list.adapter.PokemonItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class MainViewModel: ViewModel() {
 
-    //private val repository: PokemonRepository = MockPokemonRepository()
-    private val repository: PokemonRepository = NetworkPokemonRepository(
-        api = createPokedexApiService()
-    )
+    private val repository = Injector.providePokemonRepository()
 
     private var disposable: Disposable? = null
 
