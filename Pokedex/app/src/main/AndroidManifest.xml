@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokedex">
         <activity
-            android:name=".presentation.list.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.details.PokemonDetailsActivity"/>
+        <activity android:name=".presentation.details.PokemonDetailsFragment"/>
 
         <meta-data
             android:name="preloaded_fonts"
