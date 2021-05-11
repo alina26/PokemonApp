@@ -2,13 +2,15 @@ package com.example.pokedex.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pokedex.R
 import com.example.pokedex.presentation.details.PokemonDetailsFragment
 import com.example.pokedex.presentation.list.PokemonListFragment
 
 class MainActivity : AppCompatActivity(), Navigation {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(R.layout.fragment_pokemon_list);
         supportFragmentManager.beginTransaction()
             .replace(android.R.id.content, PokemonListFragment())
             .commit()

@@ -3,9 +3,11 @@ package com.example.pokedex.presentation.list
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.pokedex.R
 import com.example.pokedex.presentation.Navigation
 import com.example.pokedex.presentation.list.adapter.DisplayableItem
@@ -20,18 +22,21 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        val progressView = view.findViewById<LottieAnimationView>(R.id.animationLoader)
         initRecyclerView()
 
-        viewModel.viewState().observe(this){ state ->
+        viewModel.viewState().observe(viewLifecycleOwner){ state ->
             when(state){
                 is PokemonListViewState.LoadingState ->{
+                    progressView.isVisible = true
                     showProgress()
                 }
                 is PokemonListViewState.ErrorState -> {
+                    progressView.isVisible = false
                     showError(state.errorMessage)
                 }
                 is PokemonListViewState.ContentState -> {
+                    progressView.isVisible = false
                     showData(state.items)
                 }
             }
@@ -57,6 +62,7 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
    private fun showProgress() {
         Toast.makeText(context, "Loading", Toast.LENGTH_LONG).show()
+
     }
 
    private fun showData(items: List<DisplayableItem>) {

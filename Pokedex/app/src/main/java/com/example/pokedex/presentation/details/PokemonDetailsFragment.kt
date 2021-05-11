@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.airbnb.lottie.LottieAnimationView
 import com.example.pokedex.R
 import com.squareup.picasso.Picasso
 
@@ -45,11 +46,11 @@ class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
     private fun loadPokemonData(view: View, id: String) {
         viewModel.loadPokemonById(id)
 
-        val progressView = view.findViewById<ProgressBar>(R.id.progress)
+        val progressView = view.findViewById<LottieAnimationView  >(R.id.animationView)
         val contentView = view.findViewById<View>(R.id.content_group)
         val errorView = view.findViewById<TextView>(R.id.error_message_text)
 
-        viewModel.viewState().observe(this) { viewState ->
+        viewModel.viewState().observe(viewLifecycleOwner) { viewState ->
             when (viewState) {
                 PokemonDetailsViewState.Loading -> {
                     progressView.isVisible = true
