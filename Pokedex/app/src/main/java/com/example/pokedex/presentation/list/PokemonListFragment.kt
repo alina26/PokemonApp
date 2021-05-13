@@ -12,6 +12,7 @@ import com.example.pokedex.R
 import com.example.pokedex.presentation.Navigation
 import com.example.pokedex.presentation.list.adapter.DisplayableItem
 import com.example.pokedex.presentation.list.adapter.PokemonListAdapter
+import com.example.pokedex.domain.Result
 
 class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
@@ -27,15 +28,15 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
         viewModel.viewState().observe(viewLifecycleOwner){ state ->
             when(state){
-                is PokemonListViewState.LoadingState ->{
+                is PokemonListViewState.Loading ->{
                     progressView.isVisible = true
                     showProgress()
                 }
-                is PokemonListViewState.ErrorState -> {
+                is PokemonListViewState.Error -> {
                     progressView.isVisible = false
-                    showError(state.errorMessage)
+                    showError(state.message)
                 }
-                is PokemonListViewState.ContentState -> {
+                is PokemonListViewState.Data -> {
                     progressView.isVisible = false
                     showData(state.items)
                 }

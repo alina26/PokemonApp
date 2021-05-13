@@ -2,8 +2,8 @@ package com.example.pokedex.data
 
 import com.example.pokedex.domain.PokemonEntity
 import com.example.pokedex.domain.PokemonRepository
-import com.example.pokedex.domain.RepositoryCallback
-import io.reactivex.Single
+import com.example.pokedex.domain.Result
+import java.lang.Exception
 
 class MockPokemonRepository : PokemonRepository {
 
@@ -20,18 +20,17 @@ class MockPokemonRepository : PokemonRepository {
         PokemonEntity("10", "caterpie", generateUrlFromId(10)),
         )
 
-    override fun getPokemonList(): Single<List<PokemonEntity>> =
-        Single.just(items)
+    override suspend fun getPokemonList(): Result<List<PokemonEntity>> = Result.Success(items)
 
-    override fun getPokemonById(id: String): Single<PokemonEntity> {
+    override suspend fun getPokemonById(id: String): Result<PokemonEntity> {
         val pokemon = items.find { it.id == id }
         return if (pokemon != null) {
-            Single.just(pokemon)
+            Result.Success(pokemon)
         } else {
-            Single.error(Throwable("Not found"))
+            Result.Error(Exception("Not found"))
         }
     }
 
-    fun generateUrlFromId(id: Int): String =
+    private fun generateUrlFromId(id: Int): String =
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
 }

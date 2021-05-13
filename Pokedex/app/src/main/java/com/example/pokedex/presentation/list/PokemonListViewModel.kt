@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pokedex.di.Injector
-import com.example.pokedex.presentation.list.adapter.toItem
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
+import com.example.pokedex.domain.Result
+import com.example.pokedex.presentation.list.adapter.toItem
 
 class PokemonListViewModel: ViewModel() {
 
@@ -21,25 +22,20 @@ class PokemonListViewModel: ViewModel() {
 
     fun loadData() {
 
-        viewStateLiveData.value = PokemonListViewState.LoadingState
+        viewStateLiveData.value = PokemonListViewState.Loading
 
-        disposable = repository.getPokemonList()
-            .map { items -> items.map { it.toItem() } }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    viewStateLiveData.value = PokemonListViewState.ContentState(it)
-                }, {
-                    Log.d("ViewModel", "Error is", it)
-                    viewStateLiveData.value = PokemonListViewState.ErrorState("Something went wrong")
+        viewModelScope.launch {
+            viewStateLiveData.value =  when (val result = repository.getPokemonList()) {
+                is Result.Success -> {
+                    val pokemonItems = result.data.map { it.toItem() }
+                    PokemonListViewState.Data(pokemonItems)
                 }
-            )
-    }
 
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
+            is Result.Error -> {
+            Log.d("ViewModel", "Error is", result.exception)
+            PokemonListViewState.Error("Error Message")
+                }
+            }
+        }
     }
 }
