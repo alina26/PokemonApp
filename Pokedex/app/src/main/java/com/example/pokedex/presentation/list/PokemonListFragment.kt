@@ -12,11 +12,11 @@ import com.example.pokedex.R
 import com.example.pokedex.presentation.Navigation
 import com.example.pokedex.presentation.list.adapter.DisplayableItem
 import com.example.pokedex.presentation.list.adapter.PokemonListAdapter
-import com.example.pokedex.domain.Result
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
-    private val viewModel = PokemonListViewModel()
+    private val viewModel:PokemonListViewModel by viewModel()
     private var adapter: PokemonListAdapter? = null
     private val navigation: Navigation? by lazy { (activity as? Navigation) }
 

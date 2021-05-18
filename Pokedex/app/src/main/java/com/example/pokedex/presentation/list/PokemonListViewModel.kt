@@ -5,15 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokedex.di.Injector
+import com.example.pokedex.domain.PokemonRepository
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 import com.example.pokedex.domain.Result
 import com.example.pokedex.presentation.list.adapter.toItem
 
-class PokemonListViewModel: ViewModel() {
+class PokemonListViewModel(private val repository: PokemonRepository): ViewModel() {
 
-    private val repository = Injector.providePokemonRepository()
 
     private var disposable: Disposable? = null
 
@@ -27,8 +26,8 @@ class PokemonListViewModel: ViewModel() {
         viewModelScope.launch {
             viewStateLiveData.value =  when (val result = repository.getPokemonList()) {
                 is Result.Success -> {
-                    val pokemonItems = result.data.map { it.toItem() }
-                    PokemonListViewState.Data(pokemonItems)
+                    val pokemonList = result.data
+                    PokemonListViewState.Data(pokemonList.map { it.toItem() })
                 }
 
             is Result.Error -> {
