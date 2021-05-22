@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PokemonDetailsViewModel(
+    private val id: String,
     private val repository: PokemonRepository
 ): ViewModel() {
 
@@ -19,8 +20,9 @@ class PokemonDetailsViewModel(
 
     fun viewState(): LiveData<PokemonDetailsViewState> = viewStateLiveData
 
-    fun loadPokemonById(id: String) {
+    fun loadPokemon() {
         viewStateLiveData.value = PokemonDetailsViewState.Loading
+
 
 
 

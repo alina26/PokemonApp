@@ -3,13 +3,15 @@ package com.example.pokedex.presentation.list
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.example.pokedex.R
-import com.example.pokedex.presentation.Navigation
+import com.example.pokedex.presentation.details.PARAM_POKEMON_ID
 import com.example.pokedex.presentation.list.adapter.DisplayableItem
 import com.example.pokedex.presentation.list.adapter.PokemonListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,13 +20,13 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
     private val viewModel:PokemonListViewModel by viewModel()
     private var adapter: PokemonListAdapter? = null
-    private val navigation: Navigation? by lazy { (activity as? Navigation) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val progressView = view.findViewById<LottieAnimationView>(R.id.animationLoader)
         initRecyclerView()
+
 
         viewModel.viewState().observe(viewLifecycleOwner){ state ->
             when(state){
@@ -49,7 +51,10 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
         adapter = PokemonListAdapter(
             onItemClicked = { id ->
-                navigation?.openPokemonDetails(id)
+                val bundle = bundleOf(
+                    PARAM_POKEMON_ID to id
+                )
+                findNavController().navigate(R.id.action_pokemonList_to_pokemonDetails, bundle)
             }
         )
 

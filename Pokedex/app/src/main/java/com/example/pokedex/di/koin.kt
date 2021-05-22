@@ -16,7 +16,7 @@ val appModule = module {
     single<PokemonRepository> { NetworkPokemonRepository(get()) }
 
     viewModel { PokemonListViewModel(get()) }
-    viewModel { PokemonDetailsViewModel(get()) }
+    viewModel { (id: String) -> PokemonDetailsViewModel(id, get()) }
 }
 
 private fun createPokedexApiService(): PokedexApiService {

@@ -5,7 +5,6 @@
     android:id="@+id/base"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECB4FB"
     tools:context=".presentation.MainActivity">
 
     <com.airbnb.lottie.LottieAnimationView

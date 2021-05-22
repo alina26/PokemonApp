@@ -12,35 +12,26 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.pokedex.R
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+
+const val PARAM_POKEMON_ID = "Pockemon_Id"
 
 class PokemonDetailsFragment: Fragment(R.layout.fragment_pokemon_details) {
 
-    private val viewModel:PokemonDetailsViewModel by viewModel()
 
-    companion object{
-        private const val PARAM_POKEMON_ID = "Pokemon_Id"
-
-        fun newInstance(id: String): Fragment = PokemonDetailsFragment().apply {
-            arguments = bundleOf(
-                PARAM_POKEMON_ID to id
-            )
-        }
+    private val id: String by lazy {
+        arguments?.getString(PARAM_POKEMON_ID) ?: ""
     }
+
+    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(id) }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val id = arguments?.getString(PARAM_POKEMON_ID)
-
-        if(id != null){
-            loadPokemonData(view, id)
-        } else{
-            Log.d("TAG, ","Error, pokemon with id=$id not found")
-        }
-
+        initView(view)
+        viewModel.loadPokemon()
     }
 
-    private fun loadPokemonData(view: View, id: String) {
-        viewModel.loadPokemonById(id)
+    private fun initView(view: View) {
 
         val progressView = view.findViewById<LottieAnimationView  >(R.id.animationView)
         val contentView = view.findViewById<View>(R.id.content_group)
