@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class NetworkPokemonRepository(
-    val api: PokedexApiService
+    private val api: PokedexApiService
     ): PokemonRepository {
 
     override suspend fun getPokemonList(): Result<List<PokemonEntity>> = withContext(Dispatchers.IO) {

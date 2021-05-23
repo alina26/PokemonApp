@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
+import com.example.pokedex.databinding.MainItemBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
@@ -45,21 +46,18 @@ class PokemonListAdapter(
             else -> {
                 throw IllegalStateException()
             }
-
         }
-
-
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val itemToShow = items[position]
 
-        when (itemToShow) {
+
+        when (val item = items[position]) {
             is PokemonItem -> {
-                (holder as PokemonViewHolder).bind(itemToShow)
+                (holder as PokemonViewHolder).bind(item)
             }
             is HeaderItem -> {
-                (holder as HeaderViewHolder).bind(itemToShow)
+                (holder as HeaderViewHolder).bind(item)
             }
         }
     }
@@ -76,27 +74,13 @@ class PokemonListAdapter(
 
 
     class PokemonViewHolder(view: View, val onItemClicked: (id: String) -> Unit) : RecyclerView.ViewHolder(view) {
-        private val textView = itemView.findViewById<TextView>(R.id.itemName)
-        private val imagePreview = itemView.findViewById<ImageView>(R.id.imagePreview)
 
-        fun bind(item: PokemonItem) {
-            textView.text = item.name
+        private val binding = MainItemBinding.bind(itemView)
 
-            if (item.useRedColor) {
-                textView.setTextColor(Color.RED)
-            } else {
-                textView.setTextColor(Color.BLACK)
-            }
+        fun bind(item: PokemonItem) = with(binding) {
 
-            Picasso.get().load(item.image).into(imagePreview, object : Callback {
-                override fun onSuccess() {
-                    Log.d("", "Loaded image")
-                }
-
-                override fun onError(e: Exception?) {
-                    Log.d("", "Loaded image", e)
-                }
-            })
+            itemName.text = item.name
+            Picasso.get().load(item.image).into(imagePreview)
 
             itemView.setOnClickListener{
                 onItemClicked(item.id)

@@ -6,5 +6,5 @@ sealed class PokemonListViewState {
 
     object Loading: PokemonListViewState()
     data class Error(val message: String): PokemonListViewState()
-    data class Data(val items: List<PokemonItem>): PokemonListViewState()
+    data class Content(val items: List<PokemonItem>): PokemonListViewState()
 }

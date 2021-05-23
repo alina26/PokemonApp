@@ -7,7 +7,7 @@ import java.lang.Exception
 
 class MockPokemonRepository : PokemonRepository {
 
-    val items = mutableListOf<PokemonEntity>(
+    private val items = mutableListOf<PokemonEntity>(
         PokemonEntity("1", "bulbasaur", generateUrlFromId(1)),
         PokemonEntity("2", "ivysaur", generateUrlFromId(2)),
         PokemonEntity("3", "venusaur", generateUrlFromId(3)),
