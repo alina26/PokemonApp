@@ -1,18 +1,15 @@
 package com.example.pokedex.presentation.list.adapter
 
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 import com.example.pokedex.databinding.MainItemBinding
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 private const val ITEM_TYPE_UNKNOWN = 0
 private const val ITEM_TYPE_POKEMON = 1
@@ -20,16 +17,19 @@ private const val ITEM_TYPE_HEADER = 2
 
 class PokemonListAdapter(
     private val onItemClicked: (id:String) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : ListAdapter<DisplayableItem, RecyclerView.ViewHolder>(PokemonItemDiffCallback) {
 
-    private var items: MutableList<DisplayableItem> = emptyList<DisplayableItem>().toMutableList()
+    private object PokemonItemDiffCallback : DiffUtil.ItemCallback<DisplayableItem>() {
+        override fun areItemsTheSame(
+            oldItem: DisplayableItem,
+            newItem: DisplayableItem
+        ): Boolean = oldItem == newItem
 
-    fun setPokemonList(pokemons: List<DisplayableItem>) {
-        items.clear()
-        items.addAll(pokemons)
-        notifyDataSetChanged()
+        override fun areContentsTheSame(
+            oldItem: DisplayableItem,
+            newItem: DisplayableItem
+        ): Boolean = false
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return when (viewType) {
@@ -50,9 +50,7 @@ class PokemonListAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
-        when (val item = items[position]) {
+        when (val item = getItem(position)) {
             is PokemonItem -> {
                 (holder as PokemonViewHolder).bind(item)
             }
@@ -63,15 +61,12 @@ class PokemonListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when(items[position]) {
+        return when(getItem(position)) {
             is PokemonItem -> ITEM_TYPE_POKEMON
             is HeaderItem -> ITEM_TYPE_HEADER
             else -> ITEM_TYPE_UNKNOWN
         }
     }
-
-    override fun getItemCount(): Int = items.size
-
 
     class PokemonViewHolder(view: View, val onItemClicked: (id: String) -> Unit) : RecyclerView.ViewHolder(view) {
 

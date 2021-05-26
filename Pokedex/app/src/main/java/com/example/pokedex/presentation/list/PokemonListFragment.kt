@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.pokedex.R
 import com.example.pokedex.databinding.FragmentPokemonListBinding
 import com.example.pokedex.presentation.list.adapter.DisplayableItem
@@ -17,20 +18,14 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
     private val viewModel: PokemonListViewModel by viewModel()
     private var adapter: PokemonListAdapter? = null
-    private var binding: FragmentPokemonListBinding? = null
+    private val viewBinding: FragmentPokemonListBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentPokemonListBinding.bind(view)
         initRecyclerView()
         initViewModel()
         viewModel.fetch()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 
     private fun initViewModel() {
@@ -39,17 +34,17 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
     }
 
     private fun showViewState(state: PokemonListViewState) {
-        val progressView = binding?.animationLoader
+        val progressView = viewBinding.animationLoader
         when (state) {
             is PokemonListViewState.Loading -> {
-                progressView?.isVisible = true
+                progressView.isVisible = true
             }
             is PokemonListViewState.Error -> {
-                progressView?.isVisible = false
+                progressView.isVisible = false
                 showError(state.message)
             }
             is PokemonListViewState.Content -> {
-                progressView?.isVisible = false
+                progressView.isVisible = false
                 showData(state.items)
             }
         }
@@ -64,7 +59,7 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
         )
 
         val manager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-        binding?.recyclerView?.apply {
+        viewBinding.recyclerView.apply {
             layoutManager = manager
             adapter = this@PokemonListFragment.adapter
         }
@@ -73,7 +68,7 @@ class PokemonListFragment : Fragment(R.layout.fragment_pokemon_list) {
 
 
     private fun showData(items: List<DisplayableItem>) {
-        adapter?.setPokemonList(items)
+        adapter?.submitList(items)
     }
 
     private fun showError(errorMessage: String) {

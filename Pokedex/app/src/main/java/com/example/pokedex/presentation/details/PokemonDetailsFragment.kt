@@ -10,26 +10,21 @@ import com.example.pokedex.databinding.FragmentPokemonDetailsBinding
 import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import by.kirich1409.viewbindingdelegate.viewBinding
 
 class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
-    private val args by navArgs<PokemonDetailsFragmentArgs>()
-    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(args.pokemonId) }
-    private var binding: FragmentPokemonDetailsBinding? = null
+    private val navArgs by navArgs<PokemonDetailsFragmentArgs>()
+    private val viewModel: PokemonDetailsViewModel by viewModel { parametersOf(navArgs.pokemonId) }
+    private val viewBinding: FragmentPokemonDetailsBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentPokemonDetailsBinding.bind(view)
         viewModel.viewState().observe(viewLifecycleOwner) { state -> showViewState(state) }
         viewModel.loadPokemon()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
-    private fun showViewState(viewState: PokemonDetailsViewState) = binding?.apply {
+    private fun showViewState(viewState: PokemonDetailsViewState) = viewBinding.apply {
         when (viewState) {
             PokemonDetailsViewState.Loading -> {
                 animationView.isVisible = true
@@ -51,9 +46,9 @@ class PokemonDetailsFragment : Fragment(R.layout.fragment_pokemon_details) {
 
     }
 
-    private fun showContent(state: PokemonDetailsViewState.Content) = binding?.apply {
-        name.text = state.name
-        abilities.text = state.abilities.joinToString(separator = ",") { it }
+    private fun showContent(state: PokemonDetailsViewState.Content) = viewBinding.apply {
+        name.text = state.name.capitalize()
+        abilities.text = state.abilities.map { it.capitalize() }.joinToString(separator = ", ") { it }
         Picasso.get().load(state.imageUrl).into(image)
     }
 }
