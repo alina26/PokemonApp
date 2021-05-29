@@ -8,6 +8,7 @@ import com.example.pokedex.domain.Result
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class NetworkPokemonRepository(
@@ -28,6 +29,7 @@ class NetworkPokemonRepository(
 
 
     override suspend fun getPokemonById(id: String): Result<PokemonEntity> = withContext(Dispatchers.IO) {
+        delay(2000)
         try {
             val entity = api.fetchPokemonDetails(id).toEntity()
             Result.Success(entity)

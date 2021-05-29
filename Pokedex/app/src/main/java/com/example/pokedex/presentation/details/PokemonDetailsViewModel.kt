@@ -25,7 +25,7 @@ class PokemonDetailsViewModel(
 
 
         viewModelScope.launch {
-            delay(2000)
+//            delay(2000)
             viewStateLiveData.value = when (val result = repository.getPokemonById(id)) {
                 is Result.Success -> {
                     val pokemonEntity = result.data
