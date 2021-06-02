@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pokedex.di.Injector
 import com.example.pokedex.domain.PokemonEntity
 import com.example.pokedex.domain.PokemonRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PokemonDetailsViewModel(
@@ -23,9 +21,7 @@ class PokemonDetailsViewModel(
     fun loadPokemon() {
         viewStateLiveData.value = PokemonDetailsViewState.Loading
 
-
         viewModelScope.launch {
-//            delay(2000)
             viewStateLiveData.value = when (val result = repository.getPokemonById(id)) {
                 is Result.Success -> {
                     val pokemonEntity = result.data

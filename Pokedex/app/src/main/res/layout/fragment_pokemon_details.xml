@@ -24,8 +24,6 @@
         app:lottie_rawRes="@raw/loading"/>
 
 
-
-
     <ImageView
         android:id="@+id/image"
         android:layout_width="0dp"

@@ -5,8 +5,6 @@ import com.example.pokedex.data.network.PokemonDetailsResponse
 import com.example.pokedex.domain.PokemonEntity
 import com.example.pokedex.domain.PokemonRepository
 import com.example.pokedex.domain.Result
-import io.reactivex.Observable
-import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -22,8 +20,8 @@ class NetworkPokemonRepository(
                 api.fetchPokemonDetails(id).toEntity()
             }
             Result.Success(pokemonListWithDetails)
-        } catch (th: Exception) {
-            Result.Error(th)
+        } catch (exception: Exception) {
+            Result.Error(exception)
         }
     }
 
@@ -45,6 +43,6 @@ class NetworkPokemonRepository(
             previewUrl = generateUrlFromId(id),
             abilities = abilities.map { it.ability.name })
 
-    private fun generateUrlFromId(id: String): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"
+    private fun generateUrlFromId(id: String): String = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$id.png"
 
 }

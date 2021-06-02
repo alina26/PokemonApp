@@ -1,8 +1,6 @@
 package com.example.pokedex.data.network
 
-import io.reactivex.Single
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -51,13 +49,13 @@ data class PokemonDetailsResponse(
     val abilities: List<PokemonAbilityData>
 )
 
-data class PokemonAbilityDetailsData(
-    val name: String,
-    val url: String
-)
-
 data class PokemonAbilityData(
     val ability: PokemonAbilityDetailsData,
     val is_hidden: Boolean,
     val slot: Int,
+)
+
+data class PokemonAbilityDetailsData(
+    val name: String,
+    val url: String
 )
